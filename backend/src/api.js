@@ -7,7 +7,7 @@ const orderService = require('./services/OrderService');
 const cartService = require('./services/CartService');
 const auditLogger = require('./services/AuditLogger');
 const fraudService = require('./services/FraudService');
-const failureInjector = require('../utils/FailureInjector');
+const failureInjector = require('./utils/FailureInjector');
 
 const app = express();
 app.use(cors());
