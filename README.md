@@ -13,6 +13,17 @@ This project simulates the complex backend operations of high-volume platforms l
 - **Fraud & Idempotency (Task 17, 19)**: Velocity tracking and payment idempotency tokens.
 - **Audit Logs (Task 16)**: Immutable append-only log stream.
 
+## 🏗️ Design Approach
+- **Modular Services**: The architecture follows a loose-coupled service-oriented design. Product, Cart, Order, and Payment logic are isolated to simulate a microservice ecosystem.
+- **Data Integrity**: Uses an asynchronous Mutex pattern for row-level locking during inventory updates to ensure zero data corruption during high-concurrency "Flash Sales".
+- **Resilience**: Implements a SAGA-like transaction coordinator that tracks every step of order placement. If a downstream step (like Payment) fails, it automatically triggers compensatory actions (like Restoring Stock) across the system.
+- **Event-Driven**: System-wide notifications (e.g., LOW_STOCK_ALERT) are handled via a central EventBus to decouple business logic from monitoring.
+
+## 📝 Assumptions
+- **In-Memory Storage**: For hackathon simulation purposes, all data is stored in-memory. Restarting the backend will reset the inventory and order counts.
+- **Single User Simulation**: While the backend is built for multi-tenancy, the CLI and Dashboard currently focus on simulating interactions for `USER_1`.
+- **Clock Synchronization**: Timeouts (120s for cart) are handled via server-side timers and assume a consistent system clock.
+
 ## 📁 Project Structure
 - `/backend`: Core services (Product, Order, etc.), API, and the **CLI Menu application**.
 - `/frontend`: Modern React Dashboard for real-time system monitoring.
